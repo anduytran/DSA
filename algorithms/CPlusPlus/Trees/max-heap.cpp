@@ -1,6 +1,12 @@
 #include <vector>
 #include <iostream>
 
+/*
+ A max heap is a binary tree where each node has a value that is greater than its children.
+ It is typically used when you need quick access to the greatest value in a data structure.
+ It is also a commonly used solution for the kth smallest value problem.
+ */
+
 class MaxHeap{
     std::vector<int> v;
     void heapifyUp(int &nodeIndex, int val){
@@ -33,7 +39,7 @@ public:
         std::vector<int> vec;
         v = vec;
     }
-    void push(int x){
+    void push(int x){ // O(log n)
         if(v.empty()){ // if the vector is empty
             v.push_back(x); // no further work needs to be done
             return;
@@ -45,22 +51,22 @@ public:
         }
 
     }
-    void pop(){
+    void pop(){ // O(log n)
         v[0] = v[v.size() - 1];
         v.resize(v.size() - 1);
         int index = 0;
         heapifyDown(index, v[0]);
     }
-    bool empty(){
+    bool empty(){ // O(1)
         return v.empty();
     }
-    int size(){
+    int size(){ // O(1)
         return v.size();
     }
-    int top(){
+    int top(){ // O(1)
         return v[0];
     }
-    void swap(MaxHeap& heap){
+    void swap(MaxHeap& heap){ // O(n) with n being the size of the vectors
         if(heap.size() != size()){
             return;
         }
@@ -69,7 +75,7 @@ public:
         v = temp;
         return;
     }
-    void print(){
+    void print(){ // O(n) with n being the size of the vectors
         std::string temp = "";
         for(int i = 0; i < v.size(); i++){
             temp += std::to_string(v[i]);
@@ -97,5 +103,11 @@ int main() {
     heap.swap(heap2);
     heap.print();
     heap2.print();
+
+    // 5, 1, 3
+    // 6, 2, 4
+    // 6, 2, 4
+    // 5, 1, 3
+
     return 0;
 }
