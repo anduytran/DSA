@@ -1,36 +1,30 @@
 #include <vector>
 #include <iostream>
 
-/*
- A max heap is a binary tree where each node has a value that is greater than its children.
- It is typically used when you need quick access to the greatest value in a data structure.
- It is also a commonly used solution for the kth smallest value problem.
- */
-
 class MaxHeap{
     std::vector<int> v;
-    void heapifyUp(int &nodeIndex, int val){
-        if(nodeIndex == 0){
-            return;
-        }
-        int parentIndex = (nodeIndex + 1) / 2 - 1;
-        if(v[nodeIndex] > v[parentIndex]){ // swap if needed
-            v[nodeIndex] = v[parentIndex];
-            v[parentIndex] = val;
-            nodeIndex = parentIndex;
-            heapifyUp(nodeIndex, val);
+    void heapifyUp(int &nodeIndex, int val){ // required when pushing a node because when pushing to a max heap,
+        if(nodeIndex == 0){                  // the node is inserted in the bottom right, so we need to check the
+            return;                          // parents, grandparents, and ancestors until the node is in the right
+        }                                    // place
+
+        if(v[nodeIndex] > v[(nodeIndex + 1) / 2 - 1]){ // swap if needed
+            v[nodeIndex] = v[(nodeIndex + 1) / 2 - 1];
+            v[(nodeIndex + 1) / 2 - 1] = val;
+            nodeIndex = (nodeIndex + 1) / 2 - 1;
+            heapifyUp(nodeIndex, val); // recursive call
         }
     }
 
     void heapifyDown(int &nodeIndex, int val){
-        if(nodeIndex == 0){
+        if(nodeIndex == 0){ // base case
             return;
         }
         if(v[nodeIndex * 2 + 1] > v[nodeIndex] || v[nodeIndex * 2] > v[nodeIndex]){
-            int greater = std::max(2 * nodeIndex, 2 * nodeIndex + 1);
-            v[nodeIndex] = v[greater];
-            v[greater] = val;
-            nodeIndex = greater;
+            v[nodeIndex] = v[std::max(2 * nodeIndex, 2 * nodeIndex + 1)]; // std::max(2 * nodeIndex, 2 * nodeIndex + 1)
+            v[std::max(2 * nodeIndex, 2 * nodeIndex + 1)] = val;          // gives the greater of the two children
+            nodeIndex = std::max(2 * nodeIndex, 2 * nodeIndex + 1);       // to swap with
+            heapifyDown(nodeIndex, val);
         }
     }
 
@@ -39,7 +33,7 @@ public:
         std::vector<int> vec;
         v = vec;
     }
-    void push(int x){ // O(log n)
+    void push(int x){
         if(v.empty()){ // if the vector is empty
             v.push_back(x); // no further work needs to be done
             return;
@@ -51,23 +45,23 @@ public:
         }
 
     }
-    void pop(){ // O(log n)
-        v[0] = v[v.size() - 1];
-        v.resize(v.size() - 1);
+    void pop(){
+        v[0] = v[v.size() - 1]; // push last element in heap to the top
+        v.resize(v.size() - 1); // resize
         int index = 0;
         heapifyDown(index, v[0]);
     }
-    bool empty(){ // O(1)
+    bool empty(){
         return v.empty();
     }
-    int size(){ // O(1)
+    int size(){
         return v.size();
     }
-    int top(){ // O(1)
+    int top(){
         return v[0];
     }
-    void swap(MaxHeap& heap){ // O(n) with n being the size of the vectors
-        if(heap.size() != size()){
+    void swap(MaxHeap& heap){
+        if(heap.size() != size()){ // two heaps have to be the same size for them to swap elements
             return;
         }
         std::vector<int> temp = heap.v;
@@ -75,7 +69,7 @@ public:
         v = temp;
         return;
     }
-    void print(){ // O(n) with n being the size of the vectors
+    void print(){
         std::string temp = "";
         for(int i = 0; i < v.size(); i++){
             temp += std::to_string(v[i]);
@@ -103,11 +97,5 @@ int main() {
     heap.swap(heap2);
     heap.print();
     heap2.print();
-
-    // 5, 1, 3
-    // 6, 2, 4
-    // 6, 2, 4
-    // 5, 1, 3
-
     return 0;
 }
