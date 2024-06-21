@@ -1,6 +1,13 @@
 #include <vector>
 #include <iostream>
 
+/*
+ A max heap is a binary tree where each node has a value that is greater than its children.
+ It is typically used when you need quick access to the greatest value in a data structure.
+ It is also a commonly used solution for the kth smallest value problem.
+ */
+
+
 class MaxHeap{
     std::vector<int> v;
     void heapifyUp(int &nodeIndex, int val){ // required when pushing a node because when pushing to a max heap,
@@ -99,3 +106,9 @@ int main() {
     heap2.print();
     return 0;
 }
+
+// sample output
+// 5, 1, 3
+// 6, 2, 4
+// 6, 2, 4
+// 5, 1, 3
